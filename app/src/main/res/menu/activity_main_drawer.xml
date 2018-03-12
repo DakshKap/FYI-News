@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="News">
+        <menu>
+            <item
+                android:id="@+id/top_headlines"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="Top Headlines" />
+
+        </menu>
+    </item>
+    <item android:title="Sources">
+        <menu>
+            <item
+                android:id="@+id/news_sources"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="View Sources" />
+
+        </menu>
+    </item>
+
+</menu>
