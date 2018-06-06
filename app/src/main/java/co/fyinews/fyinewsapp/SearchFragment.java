@@ -3,52 +3,33 @@ package co.fyinews.fyinewsapp;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import fyinews.adapters.NewsBySourceAdapter;
-import fyinews.adapters.TopHeadlinesAdapter;
-import fyinews.global.GlobalMethods;
-import fyinews.models.Articles;
-import fyinews.models.MainNews;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TopHeadlinesFragment.OnFragmentInteractionListener} interface
+ * {@link SearchFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TopHeadlinesFragment#newInstance} factory method to
+ * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopHeadlinesFragment extends Fragment {
+public class SearchFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private RecyclerView recyclerView;
-    private TopHeadlinesAdapter mAdapter;
-    private String newsCategory;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    private MainNews topHeadlinesCanada = new MainNews();
-    private List<Articles> topHeadlinesList = new ArrayList<>();
-
     private OnFragmentInteractionListener mListener;
 
-    public TopHeadlinesFragment() {
+    public SearchFragment() {
         // Required empty public constructor
     }
 
@@ -58,11 +39,11 @@ public class TopHeadlinesFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TopHeadlinesFragment.
+     * @return A new instance of fragment SearchFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TopHeadlinesFragment newInstance(String param1, String param2) {
-        TopHeadlinesFragment fragment = new TopHeadlinesFragment();
+    public static SearchFragment newInstance(String param1, String param2) {
+        SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -77,37 +58,20 @@ public class TopHeadlinesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        newsCategory = this.getArguments().getString("newsCategory");
-        initDataset(newsCategory);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_top_headlines, container, false);
-
-        getActivity().setTitle(newsCategory + " Headlines");
-
-
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.newsTopHeadlinesRecyclerview);
-        mAdapter = new TopHeadlinesAdapter(getActivity(),topHeadlinesList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(mAdapter);
-
         // Inflate the layout for this fragment
-        return rootView;
-
-
+        getActivity().setTitle("Search News");
+        return inflater.inflate(R.layout.fragment_search, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onTopHeadlineSelected(1);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -118,7 +82,7 @@ public class TopHeadlinesFragment extends Fragment {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement IndividualNewsFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -140,14 +104,6 @@ public class TopHeadlinesFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onTopHeadlineSelected(int id);
-
-    }
-
-    public void initDataset(String newsCategory){
-
-       // ProgressBar pb = (ProgressBar)
-        topHeadlinesCanada = GlobalMethods.getTopHeadlinesCanada(newsCategory);
-        topHeadlinesList = topHeadlinesCanada.getArticles();
+        void onFragmentInteraction(Uri uri);
     }
 }

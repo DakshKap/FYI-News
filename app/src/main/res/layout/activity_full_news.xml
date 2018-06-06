@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="co.fyinews.fyinewsapp.FullNewsActivity">
+    <ImageView
+            android:id="@+id/full_news_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="start"
+            android:visibility="visible"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_no_image" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/full_news_image"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/standard_left_margin"
+        android:layout_marginEnd="@dimen/standard_right_margin">
+
+        <TextView
+            android:id="@+id/full_news_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Heading" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

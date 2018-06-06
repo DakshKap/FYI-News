@@ -3,7 +3,9 @@ package co.fyinews.fyinewsapp;
 //import android.app.FragmentManager;
 //import android.support.v4.app.Fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
@@ -15,7 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NewsBySourceFragment.OnFragmentInteractionListener, TopHeadlinesFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SourcesFragment.OnFragmentInteractionListener, TopHeadlinesFragment.OnFragmentInteractionListener, IndividualNewsFragment.IndividualNewsFragmentInteractionListener {
 
 
     @Override
@@ -33,12 +35,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        callTopHeadlinesFragment("General");
 
     }
 
     public void getNewsSourcesList() {
-        NewsBySourceFragment fragment = new NewsBySourceFragment();
+        SourcesFragment fragment = new SourcesFragment();
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.frag_output, fragment);
@@ -84,19 +86,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.news_sources) {
-            getNewsSourcesList();
-        }else if(id == R.id.top_headlines){
-            TopHeadlinesFragment fragment = new TopHeadlinesFragment();
-            FragmentManager manager = getSupportFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.frag_output, fragment);
-            transaction.commit();
-        }
 
+        switch (id){
+            case (R.id.news_sources):
+                getNewsSourcesList();
+                break;
+            case (R.id.top_headlines_general):
+                callTopHeadlinesFragment("General");
+                break;
+            case (R.id.top_headlines_business):
+                callTopHeadlinesFragment("Business");
+                break;
+            case (R.id.top_headlines_entertainment):
+                callTopHeadlinesFragment("Entertainment");
+                break;
+            case (R.id.top_headlines_health):
+                callTopHeadlinesFragment("Health");
+                break;
+            case (R.id.top_headlines_science):
+                callTopHeadlinesFragment("Science");
+                break;
+            case (R.id.top_headlines_sports):
+                callTopHeadlinesFragment("Sports");
+                break;
+            case (R.id.top_headlines_technology):
+                callTopHeadlinesFragment("Technology");
+                break;
+
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void callTopHeadlinesFragment(String newsCategory){
+        TopHeadlinesFragment fragment = new TopHeadlinesFragment();
+        Bundle bundle = new Bundle();
+        String myMessage = newsCategory;
+        bundle.putString("newsCategory", myMessage );
+        fragment.setArguments(bundle);
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.frag_output, fragment);
+        transaction.commit();
+    }
+
+    public void switchContent(int id, Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(id, fragment, fragment.toString());
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     @Override
@@ -108,8 +147,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-//    @Override
-//    public void setActionBarTitle(String title) {
-//        getActionBar().setTitle(title);
-//    }
+    @Override
+    public void individualNewsFragmentInteraction(Uri uri) {
+
+    }
 }

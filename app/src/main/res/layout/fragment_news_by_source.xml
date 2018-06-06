@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="co.fyinews.fyinewsapp.NewsBySourceFragment">
+    tools:context="co.fyinews.fyinewsapp.SourcesFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

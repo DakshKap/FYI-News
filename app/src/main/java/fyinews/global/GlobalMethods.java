@@ -1,15 +1,9 @@
 package fyinews.global;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.text.format.DateUtils;
-import android.util.Log;
+import android.widget.Switch;
 
 import com.google.gson.Gson;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,13 +48,38 @@ public final class GlobalMethods {
         return sourcesDetailFetched;
     }
 
-    public static MainNews getTopHeadlinesCanada(){
-        ApiCallHandlerSources apiCallHandlerNews = new ApiCallHandlerSources();
+    public static MainNews getTopHeadlinesCanada(String newsCategory){
 
+        ApiCallHandlerSources apiCallHandlerNews = new ApiCallHandlerSources();
+        String API_URL = "";
         String topHeadlinesJSON = null;
+        switch (newsCategory) {
+            case "General":
+                API_URL = Constants.getApiTopHeadlinesGeneralCaUrl();
+                break;
+            case "Entertainment":
+                API_URL = Constants.getApiTopHeadlinesEntertainmentCaUrl();
+                break;
+            case "Business":
+                API_URL = Constants.getApiTopHeadlinesBusinessCaUrl();
+                break;
+            case "Health":
+                API_URL = Constants.getApiTopHeadlinesHealthCaUrl();
+                break;
+            case "Science":
+                API_URL = Constants.getApiTopHeadlinesScienceCaUrl();
+                break;
+            case "Sports":
+                API_URL = Constants.getApiTopHeadlinesSportsCaUrl();
+                break;
+            case "Technology":
+                API_URL = Constants.getApiTopHeadlinesTechnologyCaUrl();
+                break;
+        }
+
 
         try {
-            topHeadlinesJSON = apiCallHandlerNews.execute(Constants.getApiTopHeadlinesCaUrl()).get();
+            topHeadlinesJSON = apiCallHandlerNews.execute(API_URL).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -73,22 +92,9 @@ public final class GlobalMethods {
         return topHeadlinesCanada;
     }
 
-    public static Bitmap getBitmapImageFromUrl(String url){
-        DownLoadImageTask dit = new DownLoadImageTask(url);
-        Bitmap result = null;
 
-        try {
-            result = dit.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
 
-        return result;
-    }
-
-    public static String calculateDateTimeDifference(String dateTime){
+    public static String getArticleDate(String dateTime){
 
         String[] monthName = { "Jan", "Feb", "Mar", "Apr", "May", "June", "July",
                 "Aug", "Sept", "Oct", "Nov", "Dec" };
@@ -117,37 +123,6 @@ public final class GlobalMethods {
     }
 
 
-
-    static class DownLoadImageTask extends AsyncTask<String,Void,Bitmap> {
-        String imageUrl;
-
-        public DownLoadImageTask(String imageUrl){
-            this.imageUrl = imageUrl;
-        }
-
-        /*
-            doInBackground(Params... params)
-                Override this method to perform a computation on a background thread.
-         */
-        protected Bitmap doInBackground(String...urls){
-
-            Bitmap logo = null;
-            try{
-                InputStream is = new URL(imageUrl).openStream();
-                /*
-                    decodeStream(InputStream is)
-                        Decode an input stream into a bitmap.
-                 */
-                logo = BitmapFactory.decodeStream(is);
-            }catch(Exception e){ // Catch the download exception
-                e.printStackTrace();
-            }
-            return logo;
-        }
-
-
-
-    }
 
 
 

@@ -23,12 +23,12 @@ import fyinews.models.SourcesDetail;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewsBySourceFragment.OnFragmentInteractionListener} interface
+ * {@link SourcesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewsBySourceFragment#newInstance} factory method to
+ * Use the {@link SourcesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsBySourceFragment extends Fragment {
+public class SourcesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,7 +44,7 @@ public class NewsBySourceFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public NewsBySourceFragment() {
+    public SourcesFragment() {
         // Required empty public constructor
     }
 
@@ -54,11 +54,11 @@ public class NewsBySourceFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NewsBySourceFragment.
+     * @return A new instance of fragment SourcesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewsBySourceFragment newInstance(String param1, String param2) {
-        NewsBySourceFragment fragment = new NewsBySourceFragment();
+    public static SourcesFragment newInstance(String param1, String param2) {
+        SourcesFragment fragment = new SourcesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -113,7 +113,7 @@ public class NewsBySourceFragment extends Fragment {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement IndividualNewsFragmentInteractionListener");
         }
 
 

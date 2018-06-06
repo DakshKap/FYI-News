@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="News">
+    <item android:title="Top Headlines">
         <menu>
             <item
-                android:id="@+id/top_headlines"
+                android:id="@+id/top_headlines_general"
                 android:icon="@drawable/ic_view_list_black_24dp"
-                android:title="Top Headlines" />
+                android:title="General" />
+
+            <item
+                android:id="@+id/top_headlines_business"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="Business" />
+
+            <item
+                android:id="@+id/top_headlines_entertainment"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="Entertainment" />
+
+
+            <item
+                android:id="@+id/top_headlines_health"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="Health" />
+
+
+            <item
+                android:id="@+id/top_headlines_science"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="Science" />
+
+            <item
+                android:id="@+id/top_headlines_technology"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="Technology" />
+
+            <item
+                android:id="@+id/top_headlines_sports"
+                android:icon="@drawable/ic_view_list_black_24dp"
+                android:title="Sports" />
+
+
+
 
         </menu>
     </item>

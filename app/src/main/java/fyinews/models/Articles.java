@@ -1,6 +1,9 @@
 package fyinews.models;
 
-public class Articles{
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Articles implements Parcelable  {
     private Source source;
     private String author;
     private String title;
@@ -8,6 +11,27 @@ public class Articles{
     private String url;
     private String urlToImage;
     private String publishedAt;
+
+    protected Articles(Parcel in) {
+        author = in.readString();
+        title = in.readString();
+        description = in.readString();
+        url = in.readString();
+        urlToImage = in.readString();
+        publishedAt = in.readString();
+    }
+
+    public static final Creator<Articles> CREATOR = new Creator<Articles>() {
+        @Override
+        public Articles createFromParcel(Parcel in) {
+            return new Articles(in);
+        }
+
+        @Override
+        public Articles[] newArray(int size) {
+            return new Articles[size];
+        }
+    };
 
     public Source getSource(){
         return source;
@@ -50,5 +74,20 @@ public class Articles{
     }
     public void setPublishedAt(String input){
         this.publishedAt = input;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(author);
+        parcel.writeString(title);
+        parcel.writeString(description);
+        parcel.writeString(url);
+        parcel.writeString(urlToImage);
+        parcel.writeString(publishedAt);
     }
 }
