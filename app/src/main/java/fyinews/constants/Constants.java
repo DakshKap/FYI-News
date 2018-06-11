@@ -18,6 +18,8 @@ public class Constants {
     private static final String API_TOP_HEADLINES_SPORTS_CA_URL = "https://newsapi.org/v2/top-headlines?country=ca&category=sports&apiKey=" + API_KEY;
 
 
+    private static final String API_SEARCH_NEWS_CA_URL = "https://newsapi.org/v2/everything?q=searchKey&language=en&pageSize=100&apiKey=" + API_KEY;
+
     public static String getApiSourcesUrl() {
         return API_SOURCES_URL;
     }
@@ -49,4 +51,14 @@ public class Constants {
     public static String getApiTopHeadlinesSportsCaUrl() {
         return API_TOP_HEADLINES_SPORTS_CA_URL;
     }
+
+    public static String getApiSearchNewsCaUrl() {
+        return API_SEARCH_NEWS_CA_URL;
+    }
+
+    public static void setApiSearchNewsCaUrl(String searchKey) {
+        API_SEARCH_NEWS_CA_URL.replace("searchKey", searchKey);
+
+    }
+
 }

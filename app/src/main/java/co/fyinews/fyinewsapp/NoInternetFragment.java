@@ -1,23 +1,31 @@
 package co.fyinews.fyinewsapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import fyinews.global.ConnectivityReceiver;
+import fyinews.global.GlobalMethods;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AboutFragment.OnFragmentInteractionListener} interface
+ * {@link NoInternetOnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AboutFragment#newInstance} factory method to
+ * Use the {@link NoInternetFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AboutFragment extends Fragment {
+public class NoInternetFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,9 +35,9 @@ public class AboutFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private NoInternetOnFragmentInteractionListener mListener;
 
-    public AboutFragment() {
+    public NoInternetFragment() {
         // Required empty public constructor
     }
 
@@ -39,17 +47,19 @@ public class AboutFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AboutFragment.
+     * @return A new instance of fragment NoInternetFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AboutFragment newInstance(String param1, String param2) {
-        AboutFragment fragment = new AboutFragment();
+    public static NoInternetFragment newInstance(String param1, String param2) {
+        NoInternetFragment fragment = new NoInternetFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,27 +74,53 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        getActivity().setTitle("About Us");
+        View rootview = inflater.inflate(R.layout.fragment_no_internet, container, false);
+
+        Button button = (Button)rootview.findViewById(R.id.buttonRetryInternet);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+                    MainActivity mainActivity = (MainActivity) getContext();
+                    mainActivity.showSnack(checkConnection());
+
+                    if(checkConnection()){
+                        mainActivity.callTopHeadlinesFragment("General");
+                    }
+
+            }
+        });
+
+        getActivity().setTitle("No Internet");
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_about, container, false);
+        return rootview;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.noInternetOnFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof NoInternetOnFragmentInteractionListener) {
+            mListener = (NoInternetOnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement NoInternetOnFragmentInteractionListener");
         }
+    }
+
+
+    private boolean checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        return isConnected;
     }
 
     @Override
@@ -103,8 +139,8 @@ public class AboutFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface NoInternetOnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void noInternetOnFragmentInteraction(Uri uri);
     }
 }

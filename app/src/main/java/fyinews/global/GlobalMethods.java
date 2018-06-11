@@ -1,5 +1,8 @@
 package fyinews.global;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.widget.Switch;
 
 import com.google.gson.Gson;
@@ -47,6 +50,9 @@ public final class GlobalMethods {
 
         return sourcesDetailFetched;
     }
+
+
+
 
     public static MainNews getTopHeadlinesCanada(String newsCategory){
 

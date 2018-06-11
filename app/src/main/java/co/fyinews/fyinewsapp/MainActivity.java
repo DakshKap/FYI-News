@@ -3,8 +3,10 @@ package co.fyinews.fyinewsapp;
 //import android.app.FragmentManager;
 //import android.support.v4.app.Fragment;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,8 +18,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SourcesFragment.OnFragmentInteractionListener, TopHeadlinesFragment.OnFragmentInteractionListener, IndividualNewsFragment.IndividualNewsFragmentInteractionListener {
+import fyinews.global.ConnectivityReceiver;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SourcesFragment.OnFragmentInteractionListener, TopHeadlinesFragment.OnFragmentInteractionListener, IndividualNewsFragment.IndividualNewsFragmentInteractionListener, NoInternetFragment.NoInternetOnFragmentInteractionListener, ConnectivityReceiver.ConnectivityReceiverListener {
 
 
     @Override
@@ -35,16 +41,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         callTopHeadlinesFragment("General");
+
 
     }
 
     public void getNewsSourcesList() {
-        SourcesFragment fragment = new SourcesFragment();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.frag_output, fragment);
-        transaction.commit();
+
+
+        if (!checkConnection()) {
+
+            callNoInternetFragment();
+
+
+        } else {
+
+            SourcesFragment fragment = new SourcesFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.frag_output, fragment);
+            transaction.commit();
+        }
+
     }
 
 
@@ -87,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
 
-        switch (id){
+        switch (id) {
             case (R.id.news_sources):
                 getNewsSourcesList();
                 break;
@@ -119,16 +138,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void callTopHeadlinesFragment(String newsCategory){
-        TopHeadlinesFragment fragment = new TopHeadlinesFragment();
-        Bundle bundle = new Bundle();
-        String myMessage = newsCategory;
-        bundle.putString("newsCategory", myMessage );
-        fragment.setArguments(bundle);
+
+
+    public void callTopHeadlinesFragment(String newsCategory) {
+
+        if (!checkConnection()) {
+
+            callNoInternetFragment();
+
+        } else {
+
+
+            TopHeadlinesFragment fragment = new TopHeadlinesFragment();
+            Bundle bundle = new Bundle();
+            String myMessage = newsCategory;
+            bundle.putString("newsCategory", myMessage);
+            fragment.setArguments(bundle);
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.frag_output, fragment);
+            transaction.commit();
+
+        }
+    }
+
+
+    protected void callNoInternetFragment(){
+        NoInternetFragment fragmentNoInt = new NoInternetFragment();
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.frag_output, fragment);
+        transaction.replace(R.id.frag_output, fragmentNoInt);
         transaction.commit();
+
+    }
+
+    protected void showSnack(boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = "Good! Connected to Internet";
+            color = Color.WHITE;
+        } else {
+            message = "Sorry! Not connected to internet";
+            color = Color.RED;
+        }
+
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.frag_output), message, Snackbar.LENGTH_LONG);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
     }
 
     public void switchContent(int id, Fragment fragment) {
@@ -136,6 +197,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.replace(id, fragment, fragment.toString());
         ft.addToBackStack(null);
         ft.commit();
+    }
+
+    protected boolean checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        return isConnected;
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MyApplication.getInstance().setConnectivityListener(this);
+    }
+
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnack(checkConnection());
+        if(!checkConnection()){
+            NoInternetFragment fragmentNoInt = new NoInternetFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.frag_output, fragmentNoInt);
+            transaction.commit();
+        }
     }
 
     @Override
@@ -151,4 +239,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void individualNewsFragmentInteraction(Uri uri) {
 
     }
+
+    @Override
+    public void noInternetOnFragmentInteraction(Uri uri) {
+
+    }
+
+
 }

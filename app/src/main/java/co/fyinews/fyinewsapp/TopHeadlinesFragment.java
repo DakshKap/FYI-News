@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,12 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import fyinews.adapters.NewsBySourceAdapter;
 import fyinews.adapters.TopHeadlinesAdapter;
 import fyinews.global.GlobalMethods;
 import fyinews.models.Articles;
@@ -31,12 +32,13 @@ import fyinews.models.MainNews;
  * Use the {@link TopHeadlinesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopHeadlinesFragment extends Fragment {
+public class TopHeadlinesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private TopHeadlinesAdapter mAdapter;
     private String newsCategory;
     // TODO: Rename and change types of parameters
@@ -77,8 +79,15 @@ public class TopHeadlinesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        MainActivity mainActivity = (MainActivity) getContext();
+        mainActivity.showSnack(mainActivity.checkConnection());
+
+        if (!mainActivity.checkConnection()) {
+            mainActivity.callNoInternetFragment();
+
+        }
         newsCategory = this.getArguments().getString("newsCategory");
-        initDataset(newsCategory);
+        //initDataset(newsCategory);
     }
 
     @Override
@@ -90,13 +99,36 @@ public class TopHeadlinesFragment extends Fragment {
         getActivity().setTitle(newsCategory + " Headlines");
 
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.newsTopHeadlinesRecyclerview);
-        mAdapter = new TopHeadlinesAdapter(getActivity(),topHeadlinesList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(mAdapter);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.newsTopHeadlinesRecyclerview);
+
+        mSwipeRefreshLayout.post(new Runnable() {
+
+            @Override
+            public void run() {
+
+                mSwipeRefreshLayout.setRefreshing(true);
+
+                MainActivity mainActivity = (MainActivity) getContext();
+                mainActivity.showSnack(mainActivity.checkConnection());
+
+                if (!mainActivity.checkConnection()) {
+                    mainActivity.callNoInternetFragment();
+
+                }
+                // Fetching data from server
+                initDataset(newsCategory);
+
+                mAdapter = new TopHeadlinesAdapter(getActivity(), topHeadlinesList);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+                mRecyclerView.setAdapter(mAdapter);
+            }
+        });
+
 
         // Inflate the layout for this fragment
         return rootView;
@@ -111,21 +143,47 @@ public class TopHeadlinesFragment extends Fragment {
         }
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        MainActivity mainActivity = (MainActivity) getContext();
+        mainActivity.showSnack(mainActivity.checkConnection());
+
+        if (!mainActivity.checkConnection()) {
+
+
+        }
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement IndividualNewsFragmentInteractionListener");
         }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onRefresh() {
+
+        initDataset(newsCategory);
+        mRecyclerView.getAdapter().notifyDataSetChanged();
+
+    }
+
+    public void initDataset(String newsCategory) {
+
+        // ProgressBar pb = (ProgressBar)
+        topHeadlinesCanada = GlobalMethods.getTopHeadlinesCanada(newsCategory);
+        topHeadlinesList = topHeadlinesCanada.getArticles();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     /**
@@ -142,12 +200,5 @@ public class TopHeadlinesFragment extends Fragment {
         // TODO: Update argument type and name
         public void onTopHeadlineSelected(int id);
 
-    }
-
-    public void initDataset(String newsCategory){
-
-       // ProgressBar pb = (ProgressBar)
-        topHeadlinesCanada = GlobalMethods.getTopHeadlinesCanada(newsCategory);
-        topHeadlinesList = topHeadlinesCanada.getArticles();
     }
 }
