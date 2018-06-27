@@ -123,8 +123,6 @@ public class TopHeadlinesFragment extends Fragment implements SwipeRefreshLayout
                 mAdapter = new TopHeadlinesAdapter(getActivity(), topHeadlinesList);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 mRecyclerView.setLayoutManager(mLayoutManager);
-//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
                 mRecyclerView.setAdapter(mAdapter);
             }
         });

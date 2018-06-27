@@ -1,11 +1,46 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="co.fyinews.fyinewsapp.SearchFragment">
 
-
-    <SearchView
+    <LinearLayout
+        android:id="@+id/linearLayoutSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <EditText
+            android:id="@+id/searchNewsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:hint="Search" />
+
+
+
+        <ImageButton
+            android:layout_width="62dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:src="@drawable/toolbar_find" />
+
+    </LinearLayout>
+
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/searchNewsRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayoutSearch" />
+
+
+
+</RelativeLayout>

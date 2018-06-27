@@ -28,7 +28,7 @@ import fyinews.models.SourcesModel;
 
 public final class GlobalMethods {
 
-    public static List<SourcesDetail> getSourcesFromApi(){
+    public static List<SourcesDetail> getSourcesFromApi() {
         List<SourcesDetail> sourcesDetailFetched = new ArrayList<>();
         //Get JSON Sources data from newsapi.org
         ApiCallHandlerSources apiCallHandlerSources = new ApiCallHandlerSources();
@@ -43,18 +43,34 @@ public final class GlobalMethods {
 
 
         //Convert JSON to JAVA Objects
-        SourcesModel allNewsSources = new Gson().fromJson(newsSourcesResponseJSON,SourcesModel.class);
+        SourcesModel allNewsSources = new Gson().fromJson(newsSourcesResponseJSON, SourcesModel.class);
 
         //Sources newsBySource
-        sourcesDetailFetched =allNewsSources.getSources();
+        sourcesDetailFetched = allNewsSources.getSources();
 
         return sourcesDetailFetched;
     }
 
 
+    public static MainNews getSearchedNews(String searchText) {
+        ApiCallHandlerSources apiCallHandlerNews = new ApiCallHandlerSources();
+        Constants.setApiSearchNewsCaUrl(searchText);
+        String API_URL = Constants.getApiSearchNewsCaUrl();
+        String searchedNewsJSON = null;
+        try {
+            searchedNewsJSON = apiCallHandlerNews.execute(API_URL).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
+        MainNews searchedNews = new Gson().fromJson(searchedNewsJSON, MainNews.class);
 
-    public static MainNews getTopHeadlinesCanada(String newsCategory){
+        return searchedNews;
+    }
+
+    public static MainNews getTopHeadlinesCanada(String newsCategory) {
 
         ApiCallHandlerSources apiCallHandlerNews = new ApiCallHandlerSources();
         String API_URL = "";
@@ -92,23 +108,22 @@ public final class GlobalMethods {
             e.printStackTrace();
         }
 
-        MainNews topHeadlinesCanada = new Gson().fromJson(topHeadlinesJSON,MainNews.class);
+        MainNews topHeadlinesCanada = new Gson().fromJson(topHeadlinesJSON, MainNews.class);
 
 
         return topHeadlinesCanada;
     }
 
 
+    public static String getArticleDate(String dateTime) {
 
-    public static String getArticleDate(String dateTime){
-
-        String[] monthName = { "Jan", "Feb", "Mar", "Apr", "May", "June", "July",
-                "Aug", "Sept", "Oct", "Nov", "Dec" };
+        String[] monthName = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July",
+                "Aug", "Sept", "Oct", "Nov", "Dec"};
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         Date articleDateTime = new Date();
-        String[] dateTimeArray = dateTime.split("T",1);
+        String[] dateTimeArray = dateTime.split("T", 1);
         try {
-             articleDateTime = df.parse(dateTime);
+            articleDateTime = df.parse(dateTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -118,18 +133,14 @@ public final class GlobalMethods {
         String month = monthName[c.get(Calendar.MONTH)];
         String year = String.valueOf(c.get(Calendar.YEAR));
 
-        if(c.get(Calendar.DAY_OF_MONTH) <10){
-            return month+"-0"+day+"-"+year;
-        }else{
-            return month+"-"+day+"-"+year;
+        if (c.get(Calendar.DAY_OF_MONTH) < 10) {
+            return month + "-0" + day + "-" + year;
+        } else {
+            return month + "-" + day + "-" + year;
         }
 
 
-
     }
-
-
-
 
 
 }

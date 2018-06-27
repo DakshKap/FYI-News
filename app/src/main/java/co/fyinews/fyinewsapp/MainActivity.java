@@ -23,7 +23,11 @@ import android.widget.TextView;
 
 import fyinews.global.ConnectivityReceiver;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SourcesFragment.OnFragmentInteractionListener, TopHeadlinesFragment.OnFragmentInteractionListener, IndividualNewsFragment.IndividualNewsFragmentInteractionListener, NoInternetFragment.NoInternetOnFragmentInteractionListener, ConnectivityReceiver.ConnectivityReceiverListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, SourcesFragment.OnFragmentInteractionListener,
+        TopHeadlinesFragment.OnFragmentInteractionListener, IndividualNewsFragment.IndividualNewsFragmentInteractionListener,
+        NoInternetFragment.NoInternetOnFragmentInteractionListener, ConnectivityReceiver.ConnectivityReceiverListener,
+        SearchFragment.OnSearchNewsFragmentInteractionListener {
 
 
     @Override
@@ -131,11 +135,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case (R.id.top_headlines_technology):
                 callTopHeadlinesFragment("Technology");
                 break;
+            case (R.id.search_news):
+                callSearchFragment();
+                break;
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void callSearchFragment() {
+
+        if (!checkConnection()) {
+
+            callNoInternetFragment();
+
+        } else {
+
+
+            SearchFragment fragment = new SearchFragment();
+
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.frag_output, fragment);
+            transaction.commit();
+
+        }
     }
 
 
@@ -163,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    protected void callNoInternetFragment(){
+    protected void callNoInternetFragment() {
         NoInternetFragment fragmentNoInt = new NoInternetFragment();
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -205,7 +231,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -217,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showSnack(checkConnection());
-        if(!checkConnection()){
+        if (!checkConnection()) {
             NoInternetFragment fragmentNoInt = new NoInternetFragment();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
@@ -246,4 +271,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @Override
+    public void onSearchNewsFragmentInteraction(Uri uri) {
+
+    }
 }
