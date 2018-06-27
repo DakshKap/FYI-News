@@ -130,7 +130,6 @@ public class SearchFragment extends Fragment {
         if (searchEditText.getText().toString().length() != 0) {
             String searchKey = searchEditText.getText().toString();
             initDataset(searchKey);
-            String ab = Constants.getApiSearchNewsCaUrl();
             mAdapter = new SearchNewsAdapter(getActivity(), searchedNewsList);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
             mRecyclerView.setLayoutManager(mLayoutManager);
