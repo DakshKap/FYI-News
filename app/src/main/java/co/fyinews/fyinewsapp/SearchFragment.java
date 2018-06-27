@@ -23,6 +23,7 @@ import java.util.List;
 
 import fyinews.adapters.SearchNewsAdapter;
 import fyinews.adapters.TopHeadlinesAdapter;
+import fyinews.constants.Constants;
 import fyinews.global.GlobalMethods;
 import fyinews.models.Articles;
 import fyinews.models.MainNews;
@@ -127,7 +128,9 @@ public class SearchFragment extends Fragment {
 
         }
         if (searchEditText.getText().toString().length() != 0) {
-            initDataset(searchEditText.getText().toString());
+            String searchKey = searchEditText.getText().toString();
+            initDataset(searchKey);
+            String ab = Constants.getApiSearchNewsCaUrl();
             mAdapter = new SearchNewsAdapter(getActivity(), searchedNewsList);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
             mRecyclerView.setLayoutManager(mLayoutManager);
