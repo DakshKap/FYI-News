@@ -56,8 +56,8 @@ public class Constants {
         return API_SEARCH_NEWS_CA_URL;
     }
 
-    public static void setApiSearchNewsCaUrl(String searchKey) {
-        API_SEARCH_NEWS_CA_URL = API_SEARCH_NEWS_CA_URL.replace("searchKey", searchKey);
+    public static void setApiSearchNewsCaUrl(String toBeReplaced,String searchKey) {
+        API_SEARCH_NEWS_CA_URL = API_SEARCH_NEWS_CA_URL.replace(toBeReplaced, searchKey);
     }
 
 }

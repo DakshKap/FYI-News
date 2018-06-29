@@ -87,6 +87,7 @@ public class TopHeadlinesFragment extends Fragment implements SwipeRefreshLayout
 
         }
         newsCategory = this.getArguments().getString("newsCategory");
+
         //initDataset(newsCategory);
     }
 
@@ -128,6 +129,12 @@ public class TopHeadlinesFragment extends Fragment implements SwipeRefreshLayout
         });
 
 
+        if (topHeadlinesList == null) {
+            mAdapter = new TopHeadlinesAdapter(getActivity(), topHeadlinesList);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(mAdapter);
+        }
         // Inflate the layout for this fragment
         return rootView;
 

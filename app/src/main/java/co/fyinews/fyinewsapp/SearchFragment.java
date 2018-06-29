@@ -104,6 +104,13 @@ public class SearchFragment extends Fragment {
         mRecyclerView = rootview.findViewById(R.id.searchNewsRecyclerview);
         searchEditText = rootview.findViewById(R.id.searchNewsEditText);
 
+        if(searchedNewsList != null) {
+            mAdapter = new SearchNewsAdapter(getActivity(), searchedNewsList);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(mAdapter);
+        }
+
         searchEditText.setOnKeyListener(new OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 //If the keyevent is a key-down event on the "enter" button
@@ -128,12 +135,22 @@ public class SearchFragment extends Fragment {
 
         }
         if (searchEditText.getText().toString().length() != 0) {
-            String searchKey = searchEditText.getText().toString();
-            initDataset(searchKey);
-            mAdapter = new SearchNewsAdapter(getActivity(), searchedNewsList);
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setAdapter(mAdapter);
+
+//            if (mAdapter != null) {
+//                String searchKey = searchEditText.getText().toString();
+//                initDataset(searchKey);
+//                SearchNewsAdapter mAdapter1 = new SearchNewsAdapter(getActivity(), searchedNewsList);
+//                mRecyclerView.swapAdapter(mAdapter1, true);
+//            }else{
+                String searchKey = searchEditText.getText().toString();
+                initDataset(searchKey);
+                mAdapter = new SearchNewsAdapter(getActivity(), searchedNewsList);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mRecyclerView.setAdapter(mAdapter);
+//            }
+
+
         } else {
 
             Context context = getActivity().getApplicationContext();
