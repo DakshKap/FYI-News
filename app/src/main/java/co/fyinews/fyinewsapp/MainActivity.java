@@ -3,6 +3,8 @@ package co.fyinews.fyinewsapp;
 //import android.app.FragmentManager;
 //import android.support.v4.app.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +23,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ramotion.paperonboarding.PaperOnboardingFragment;
+import com.ramotion.paperonboarding.PaperOnboardingPage;
+
+import java.util.ArrayList;
+
 import fyinews.global.ConnectivityReceiver;
 
 public class MainActivity extends AppCompatActivity
@@ -29,6 +36,8 @@ public class MainActivity extends AppCompatActivity
         NoInternetFragment.NoInternetOnFragmentInteractionListener, ConnectivityReceiver.ConnectivityReceiverListener,
         SearchFragment.OnSearchNewsFragmentInteractionListener {
 
+
+    private Boolean firstTime = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +52,14 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        callTopHeadlinesFragment("General");
+
+
+
+       callTopHeadlinesFragment("General");
 
 
     }
